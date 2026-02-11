@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Purchase</title>
+
+<style>
+body {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    font-family: Arial, sans-serif;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 40px;
+}
+
+.box {
+    background: rgba(255,255,255,0.08);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    animation: fadeIn 0.6s ease;
+    text-align: center;
+    width: 400px;
+}
+
+a, button {
+    margin-top: 15px;
+    padding: 10px 18px;
+    text-decoration: none;
+    color: white;
+    background: rgba(255,255,255,0.12);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#log {
+    margin-top: 20px;
+    text-align: left;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+</style>
+</head>
+
+<body>
+<div class="box">
+    <h1>✅ Purchase Completed</h1>
+    <p id="item"></p>
+    <p id="price"></p>
+
+    <a href="shop.html">Back to Shop</a>
+
+    <h2>📝 Purchase Log</h2>
+    <div id="log"></div>
+    <button onclick="clearLog()">Clear Log</button>
+</div>
+
+<script>
+// grab URL params
+const params = new URLSearchParams(window.location.search);
+const product = params.get('product') || "Unknown Product";
+const variant = params.get('variant') || "Unknown Variant";
+const price = params.get('price') || "-";
+
+document.getElementById('item').textContent = "Item: " + product + " (" + variant + ")";
+document.getElementById('price').textContent = "Price: " + price + " SAR";
+
+// show log
+const logContainer = document.getElementById('log');
+let purchases = JSON.parse(localStorage.getItem('purchases') || "[]");
+logContainer.innerHTML = "";
+purchases.forEach(p => {
+    const div = document.createElement('div');
+    div.textContent = `${p.date} → ${p.product} (${p.variant}) - ${p.price} SAR`;
+    logContainer.appendChild(div);
+});
+
+// clear log
+function clearLog() {
+    localStorage.removeItem('purchases');
+    logContainer.innerHTML = "";
+}
+</script>
+
+</body>
+</html>
